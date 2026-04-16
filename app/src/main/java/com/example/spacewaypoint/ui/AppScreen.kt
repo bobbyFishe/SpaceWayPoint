@@ -87,7 +87,7 @@ import kotlinx.coroutines.launch
 fun AppScreen(
     viewModel: TrainingViewModel,
     onExit: () -> Unit,
-    navController: NavHostController,
+    onRestart: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val appUiState by viewModel.uiState.collectAsState()
@@ -137,8 +137,7 @@ fun AppScreen(
         }
         GameEndBanner(
             status = appUiState.status,
-            onRestart = {
-                navController.popBackStack(TrainingAppScreen.Complexity.name, inclusive = false) },
+            onRestart = onRestart,
             onExit = onExit
         )
     }

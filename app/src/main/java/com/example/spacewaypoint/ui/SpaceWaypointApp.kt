@@ -66,7 +66,7 @@ fun SpaceWaypointApp(
                 AppScreen(
                     viewModel = viewModel,
                     onExit = onExit,
-                    navController = navController
+                    onRestart = { navController.popBackStack(TrainingAppScreen.Complexity.name, inclusive = false)}
                 )
         }
     }
