@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Space Waypoint</string>
+    <string name="oxygen_blog_more50">Уровень кислорода в норме: %d %%</string>
+    <string name="oxygen_blog_more20">Уровень кислорода низкий: %d %%</string>
+    <string name="oxygen_blog_more0">Уровень кислорода критический: %d %%</string>
+    <string name="oxygen_stock">Запас O²: %d л.</string>
+    <string name="button_oxygen_up">Повысить O²</string>
+    <string name="task_count">Количество задач: %d</string>
+    <string name="mission_progress">ПРОГРЕСС МИССИИ</string>
+    <string name="isCompletedTask">%d из %d выполнено</string>
+    <string name="task_id">№ %s</string>
+    <string name="blocked_on">Заблокировано на %d сек.</string>
+    <string name="won_message">Вы успешно восстановили системы корабля! Все задачи выполнены.</string>
+    <string name="lose_message">Регистрация биологической активности прекращена. Протокол выживания аннулирован. Конец записи.</string>
+    <string name="limit_count_up_oxygen">лимит: %d  </string>
+    <string name="complexity_blog">Выбери должность</string>
+    <string name="light_complexity">Бортовой техник</string>
+    <string name="medium_comlexity">Научный офицер</string>
+    <string name="hard_complexity">Капитан корабля</string>
+</resources>
