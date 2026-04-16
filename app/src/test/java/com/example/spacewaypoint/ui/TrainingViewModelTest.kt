@@ -1,5 +1,6 @@
 package com.example.spacewaypoint.ui
 
+import com.example.spacewaypoint.data.GameDifficulty
 import com.example.spacewaypoint.data.TaskList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,38 +19,32 @@ class TrainingViewModelTest {
 
     @Before
     fun setup() {
-        // Подменяем Main диспетчер на тестовый
         Dispatchers.setMain(testDispatcher)
         TaskList.reset()
     }
 
     @After
     fun tearDown() {
-        // Сбрасываем после теста
         Dispatchers.resetMain()
     }
     @Test
     fun `when viewModel initialized then default state is correct`() {
-        // Создаем ViewModel
-        val viewModel = TrainingViewModel()
+        val viewModel = TrainingViewModel(GameDifficulty.EASY)
 
-        // Получаем текущее состояние
         val state = viewModel.uiState.value
 
-        // Проверяем начальные значения
         assertEquals(100, state.oxygenPercent)
         assertEquals(0, state.oxygenStock)
         assertEquals(0, state.taskSolved)
 
-        // Проверяем, что список задач загрузился (размер совпадает с TaskList)
         val expectedTaskCount = TaskList.getTasks().size
         assertEquals(expectedTaskCount, viewModel.getSizeTaskList())
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `check oxygen drain after 3 seconds`() = runTest { // Специальный блок для тестов корутин
-        val viewModel = TrainingViewModel()
+    fun `check oxygen drain after 3 seconds`() = runTest {
+        val viewModel = TrainingViewModel(GameDifficulty.EASY)
 
         assertEquals(100, viewModel.uiState.value.oxygenPercent)
 
@@ -70,29 +65,25 @@ class TrainingViewModelTest {
 
     @Test
     fun `when toggleTask called then expandedTaskId updates correctly`() {
-        val viewModel = TrainingViewModel()
+        val viewModel = TrainingViewModel(GameDifficulty.EASY)
         val taskId = 1
 
-        // 1. Изначально ни одна задача не должна быть открыта
         assertEquals(null, viewModel.expandedTaskId.value)
 
-        // 2. Нажимаем на задачу №1 -> она должна открыться
         viewModel.toggleTask(taskId)
         assertEquals(taskId, viewModel.expandedTaskId.value)
 
-        // 3. Нажимаем на ту же задачу №1 еще раз -> она должна закрыться (стать null)
         viewModel.toggleTask(taskId)
         assertEquals(null, viewModel.expandedTaskId.value)
 
-        // 4. Нажимаем на задачу №1, а потом на задачу №2
-        viewModel.toggleTask(taskId) // открыли 1
-        viewModel.toggleTask(2)      // открыли 2
-        assertEquals(2, viewModel.expandedTaskId.value) // первая должна закрыться, вторая открыться
+        viewModel.toggleTask(taskId)
+        viewModel.toggleTask(2)
+        assertEquals(2, viewModel.expandedTaskId.value)
     }
 
     @Test
     fun `task delete`() {
-        val viewModel = TrainingViewModel()
+        val viewModel = TrainingViewModel(GameDifficulty.EASY)
         val sizeTasks = viewModel.getSizeTaskList()
         viewModel.delTask(1)
         println(sizeTasks)
@@ -105,7 +96,7 @@ class TrainingViewModelTest {
     @Test
     fun `restoreOxygen test` () {
         // увеличение основного у которого меньше 100 при нулевых запасов
-        val viewModel = TrainingViewModel()
+        val viewModel = TrainingViewModel(GameDifficulty.EASY)
         assertEquals(100, viewModel.uiState.value.oxygenPercent)
         assertEquals(0, viewModel.uiState.value.oxygenStock)
         testDispatcher.scheduler.advanceTimeBy(10001)
@@ -155,7 +146,7 @@ class TrainingViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `when answer incorrect then task is blocked and unblocked after time`() = runTest {
-        val viewModel = TrainingViewModel()
+        val viewModel = TrainingViewModel(GameDifficulty.EASY)
         val taskId = 1
 
         viewModel.handleTaskResult(taskId, taskIsCorrect = false, 0)
@@ -163,7 +154,7 @@ class TrainingViewModelTest {
         val blockedTask = viewModel.uiState.value.tasks.find { it.id == taskId }
         assertEquals(true, blockedTask?.isBlocked)
 
-        val expectedTime = blockedTask?.complexity?.blockedTime ?: 0
+        val expectedTime = blockedTask?.complexity?.getParams(GameDifficulty.EASY)?.blockedTime ?: 0
         assertEquals(expectedTime, blockedTask?.waitingTime)
 
         testDispatcher.scheduler.advanceTimeBy(2001)
@@ -184,7 +175,7 @@ class TrainingViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `game status changes correctly`() = runTest {
-        val viewModel = TrainingViewModel()
+        val viewModel = TrainingViewModel(GameDifficulty.EASY)
 
         testDispatcher.scheduler.advanceTimeBy(100_001)
         testDispatcher.scheduler.runCurrent()

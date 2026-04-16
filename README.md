@@ -45,3 +45,7 @@
 1. Клонируйте репозиторий:
    ```bash
    git clone git@github.com:bobbyFishe/SpaceWayPoint.git
+
+## 📲 Скачать
+Вы можете скачать последнюю версию игры (APK) в разделе [Releases](https://github.com).
+
