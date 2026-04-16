@@ -10,9 +10,11 @@
   <img src="screenshots/intro.png" width="200" title="Intro Screen">
   <img src="screenshots/difficulty.png" width="200" title="Difficulty Selection">
   <img src="screenshots/gameplay.png" width="200" title="Gameplay">
+  <img src="screenshots/gameplay2.png" width="200" title="Gameplay">
+   <img src="screenshots/gameplay3.png" width="200" title="Gameplay">
+  <img src="screenshots/end.png" width="200" title="Gameplay">
 </p>
 
-> *Примечание: Чтобы картинки отображались, создай в репозитории папку `screenshots` и закинь туда скриншоты с указанными именами.*
 
 ---
 
