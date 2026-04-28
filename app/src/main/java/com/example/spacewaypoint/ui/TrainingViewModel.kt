@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class TrainingViewModel(gameDifficulty: GameDifficulty): ViewModel() {
     private val _uiState = MutableStateFlow(TrainingUiState(
-        tasks = TaskList.getTasks(),
+        tasks = TaskList.getFreshTasks(),
         gameDifficulty = gameDifficulty))
     private val _expandedTaskId = MutableStateFlow<Int?>(null)
     val expandedTaskId = _expandedTaskId.asStateFlow()
@@ -35,36 +35,15 @@ class TrainingViewModel(gameDifficulty: GameDifficulty): ViewModel() {
         }
     }
 
-//    fun addTask(
-//        title: String,
-//        desc: String,
-//        options: List<String>,
-//        correctAnswerIndex: Int,
-//        complexity: TaskComplexity
-//    ) {
-//        TaskList.addTask(
-//            title = title,
-//            desc = desc,
-//            options = options,
-//            correctAnswerIndex = correctAnswerIndex,
-//            complexity = complexity,
-//        )
-//        _uiState.update { currentState ->
-//            currentState.copy(
-//                tasks = TaskList.getTasks()
-//            )
+//    fun delTask(taskId: Int) {
+//        if (TaskList.delTask(taskId)) {
+//            _uiState.update { currentState ->
+//                currentState.copy(
+//                    tasks = TaskList.getTasks()
+//                )
+//            }
 //        }
 //    }
-
-    fun delTask(taskId: Int) {
-        if (TaskList.delTask(taskId)) {
-            _uiState.update { currentState ->
-                currentState.copy(
-                    tasks = TaskList.getTasks()
-                )
-            }
-        }
-    }
 
     fun getSizeTaskList(): Int {
         return _uiState.value.tasks.size
@@ -95,7 +74,7 @@ class TrainingViewModel(gameDifficulty: GameDifficulty): ViewModel() {
         if (taskIsCorrect) {
             _completeTaskList.update { it + taskId }
             task?.let {
-                TaskList.delTask(taskId)
+                //TaskList.delTask(taskId)
                 _uiState.update { currentState ->
                     val newSolved = currentState.taskSolved + 1
                     val newStatus =
@@ -114,9 +93,8 @@ class TrainingViewModel(gameDifficulty: GameDifficulty): ViewModel() {
     }
 
     fun restartGame() {
-        TaskList.reset()
         _uiState.value = TrainingUiState(
-            tasks = TaskList.getTasks(),
+            tasks = TaskList.getFreshTasks(),
             oxygenPercent = START_OXYGEN,
             oxygenStock = START_OXYGEN_STOCK,
             taskSolved = 0,
@@ -126,6 +104,7 @@ class TrainingViewModel(gameDifficulty: GameDifficulty): ViewModel() {
         startOxygenDrain()
         _completeTaskList.value = emptyList()
     }
+
 
     fun handleIncorrectAnswer(taskId: Int, index: Int) {
         val currentStateValue = _uiState.value

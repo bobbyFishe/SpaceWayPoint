@@ -790,7 +790,7 @@ fun TaskStatsBlockPreview() {
 fun TaskItemPreviewTrue() {
     SpaceWaypointTheme {
         TaskItem(
-            task = TaskList.getTasks()[0],
+            task = TaskList.getFreshTasks()[0],
             taskNumber = 1,
             expanded = true,
             onToggle = {},
